@@ -2,15 +2,7 @@
 # Will wait for a fix and print a lessage every second with the current location
 # and others details
 import time
-import board
-import busio
 import adafruit_gps
-
-# create a serial connection for the GPS connection using default speed and
-# a slightly higher timeout (GPS module typically update once a second)
-# These are the defults you should use for the GPS FeatherWing.
-# For other boards set RX = GPS module TX, and TX = GPS module RX pins
-# uart = busio.UART(board.TX, board.RX, baudrate=9600, timeout=10)
 
 # for a computer use the pyserial library for uart access
 import serial
