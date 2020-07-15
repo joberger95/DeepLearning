@@ -13,7 +13,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 _URL = "https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip"
 path_to_zip = tf.keras.utils.get_file("cats_and_dogs.zip", origin=_URL, extract=True)
 PATH = os.path.join(os.path.dirname(path_to_zip), "cats_and_dogs_filtered")
-
+print("Chemin du .zip avant et après extraction: ", PATH)
 # Create directory for training and validation
 train_dir = os.path.join(PATH, "train")
 valid_dir = os.path.join(PATH, "validation")
@@ -30,12 +30,12 @@ number_dogs_train = len(os.listdir(train_dogs_dir))
 number_dogs_valid = len(os.listdir(valid_dogs_dir))
 total_train = number_cats_train + number_dogs_train
 total_valid = number_cats_valid + number_dogs_valid
-print("Total number cats training: ", number_cats_train)
-print("Total number cats validate: ", number_cats_valid)
-print("Total number dogs training: ", number_dogs_train)
-print("Total number dogs validate: ", number_dogs_valid)
-print("\nTotal training images: ", total_train)
-print("Total validating images: ", total_valid)
+# print("Total number cats training: ", number_cats_train)
+# print("Total number cats validate: ", number_cats_valid)
+# print("Total number dogs training: ", number_dogs_train)
+# print("Total number dogs validate: ", number_dogs_valid)
+# print("\nTotal training images: ", total_train)
+# print("Total validating images: ", total_valid)
 
 
 # Data preparation
@@ -111,13 +111,13 @@ model.compile(
 )
 
 # For view all the layers of neural network
-model.summary()
+# model.summary()
 
 # Training the model
 history = model.fit_generator(
     train_data_generator,
     steps_per_epoch=total_train // BATCH_SIZE,
-    epochs=EPOCHS,
+    epochs=10,
     validation_data=valid_data_generator,
     validation_steps=total_valid // BATCH_SIZE,
 )
@@ -143,5 +143,22 @@ plt.plot(epochs_range, loss, label="Traingin Loss")
 plt.plot(epochs_range, val_loss, label="Validation Loss")
 plt.legend(loc="upper right")
 plt.title("Training and Validation Loss")
-plt.show()
+# plt.show()
+
+# Tensorflow Lite conversion
+# export_dir = "/home/jordan/Git/DeepLearning/Scripts/"
+# input_data = tf.constant(1.0, shape=[1, 1])
+# to_save = history.history.get_concrete_function(input_data)
+# tf.saved_model.save(history, export_dir, to_save)
+
+# converter = tf.lite.TFLiteConverter.from_saved_model(export_dir)
+# tflite_model = converter.convert()
+
+# with tf.io.gfile.GFile("model_test.tflite", "wb") as f:
+#     f.write(tflite_model)
+
+
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+open("converted_model.tflite", "wb").write(tflite_model)
 
