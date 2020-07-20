@@ -1,6 +1,6 @@
 import usb.core
 
-dev = usb.core.find(idVendor=0x0403, idProduct=0.6001)
+dev = usb.core.find(idVendor=0x0403, idProduct=0x6001)
 ep = dev[0].interfaces()[0].endpoints()[0]
 i = dev[0].interfaces()[0].bInterfaceNumber
 dev.reset()
