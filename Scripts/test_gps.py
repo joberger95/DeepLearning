@@ -2,6 +2,7 @@
 # Will wait for a fix and print a lessage every second with the current location
 # and others details
 import time
+import board
 import adafruit_gps
 
 # for a computer use the pyserial library for uart access
