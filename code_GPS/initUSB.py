@@ -1,20 +1,16 @@
-import re
-import subprocess
+import usb.core
 
-device_re = re.compile(
-    "Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$",
-    re.I,
-)
-df = subprocess.check_output("lsusb")
-devices = []
-for i in df.split(bytes("\n")):
-    if i:
-        info = device_re.match(i)
-        if info:
-            dinfo = info.groupdict()
-            dinfo["device"] = "/dev/bus/usb/%s/%s" % (
-                dinfo.pop("bus"),
-                dinfo.pop("device"),
-            )
-            devices.append(dinfo)
-print(devices)
+dev = usb.core.find(idVendor=0x0403, idProduct=0.6001)
+ep = dev[0].interfaces()[0].endpoints()[0]
+i = dev[0].interfaces()[0].bInterfaceNumber
+dev.reset()
+
+if dev.is_kernel_driver_active(i):
+    dev.detach_kernel_driver(i)
+
+dev.set_configuration()
+eaddr = ep.bEndpointAddress
+
+r = dev.read(eaddr, 100)
+print(len(r))
+
