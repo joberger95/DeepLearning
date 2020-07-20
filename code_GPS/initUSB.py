@@ -7,7 +7,7 @@ device_re = re.compile(
 )
 df = subprocess.check_output("lsusb")
 devices = []
-for i in df.split(b"\n"):
+for i in df.split(bytes("\n")):
     if i:
         info = device_re.match(i)
         if info:
