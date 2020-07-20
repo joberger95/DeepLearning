@@ -43,13 +43,14 @@ Implementation Notes
 
 """
 import time
-from micropython import const
+
+# from micropython import const
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_GPS.git"
 
 
-_GPSI2C_DEFAULT_ADDRESS = const(0x10)
+_GPSI2C_DEFAULT_ADDRESS = 0x10
 
 # Internal helper parsing functions.
 # These handle input that might be none or null and return none instead of
