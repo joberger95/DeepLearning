@@ -7,7 +7,7 @@ import adafruit_gps
 # for a computer use the pyserial library for uart access
 import serial
 
-uart = serial.Serial("../dev/ttyUSB0", baudrate=9600, timeout=10)
+uart = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=10)
 
 # Creat a GPS module instance
 gps = adafruit_gps.GPS(uart, debug=False)
