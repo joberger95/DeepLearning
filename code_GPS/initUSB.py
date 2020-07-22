@@ -5,4 +5,3 @@ backend = libusb1.get_backend(find_library=lambda _: "LibUSB/MS64/dll/libusb-1-0
 dev = usb.core.find(backend=backend)
 
 print(dev)
-parameter_list
