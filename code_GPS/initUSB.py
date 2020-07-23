@@ -1,20 +1,9 @@
-import re
-import subprocess
+import usb.core
+import usb.util
 
-device_re = re.compile(
-    "Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$",
-    re.I,
-)
-df = subprocess.check_output("lsusb")
-devices = []
-for i in df.split(0x0D):
-    if i:
-        info = device_re.match(i)
-        if info:
-            dinfo = info.groupdict()
-            dinfo["device"] = "/dev/bus/usb/%s/%s" % (
-                dinfo.pop("bus"),
-                dinfo.pop("device"),
-            )
-            devices.append(dinfo)
-print(devices)
+dev = usb.core.find(idVendor=0x001, idProduct=0x002)
+
+if dev is None:
+    raise ValueError("Device Not Found")
+
+print(dev)
