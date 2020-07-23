@@ -1,9 +1,6 @@
 import usb.core
-import usb.util
 
-dev = usb.core.find(idVendor=0xFFFE, idProduct=0x0001)
-
-if dev is None:
-    raise ValueError("Device Not Found")
-
-print(dev)
+for dev in usb.core.find(find_all=True):
+    print("Device:", dev.filename)
+    print("idVendor: %d (%s)" % (dev.idVendor, hex(dev.idVendor)))
+    print("idProdut: %d (%s)" % (dev.idProduct, hex(dev.idProduct)))
