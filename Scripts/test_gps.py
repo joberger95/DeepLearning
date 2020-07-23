@@ -3,7 +3,11 @@ import adafruit_gps
 import serial
 import board
 
-uart = serial.Serial("/dev/ttyUSB*", baudrate=9600, timeout=10)
+uart = serial.Serial(
+    "/devices/platform/usb@38200000/38200000.dwc3/xhci-hcd.0.auto/usb1/1-1",
+    baudrate=9600,
+    timeout=10,
+)
 gps = adafruit_gps.GPS(uart, debug=False)
 
 # With I2C test
