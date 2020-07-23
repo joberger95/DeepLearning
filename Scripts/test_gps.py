@@ -1,10 +1,5 @@
-# Simple GPS module demonstration
-# Will wait for a fix and print a lessage every second with the current location
-# and others details
 import time
 import adafruit_gps
-
-# for a computer use the pyserial library for uart access
 import serial
 
 uart = serial.Serial("/dev/bus/usb/001/002", baudrate=9600, timeout=10)
