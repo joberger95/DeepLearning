@@ -9,4 +9,4 @@ else:
     print(dev)
     dev.set_configuration()
 
-print(usb.core.Device.get_active_configuration())
+print(usb.core.Device.get_active_configuration(dev))
