@@ -3,7 +3,7 @@ import adafruit_gps
 import serial
 import board
 
-uart = serial.Serial("/dev/bus/usb/001/002", baudrate=9600, timeout=10)
+uart = serial.Serial("/dev/ttyUSB*", baudrate=9600, timeout=10)
 gps = adafruit_gps.GPS(uart, debug=False)
 
 # With I2C test
