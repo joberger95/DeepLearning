@@ -1,7 +1,6 @@
 import time
 import adafruit_gps
 import serial
-import board
 
 uart = serial.Serial(
     "/devices/platform/usb@38200000/38200000.dwc3/xhci-hcd.0.auto/usb1/1-1",
