@@ -10,16 +10,12 @@ else:
     dev.set_configuration()
 
 
-def send(cmd):
-    # address taken from results of print(dev):   ENDPOINT 0x3: Bulk OUT
-    dev.write(3, cmd)
-    # address taken from results of print(dev):   ENDPOINT 0x81: Bulk IN
-    result = dev.read(0x81, 100000, 1000)
-    return result
-
-
-def get_id():
-    return send("*IDN?").tobytes().decode("utf-8")
+# def send(cmd):
+#     # address taken from results of print(dev):   ENDPOINT 0x3: Bulk OUT
+#     dev.write(3, cmd)
+#     # address taken from results of print(dev):   ENDPOINT 0x81: Bulk IN
+#     result = dev.read(0x81, 100000, 1000)
+#     return result
 
 
 def get_data(ch):
@@ -42,14 +38,6 @@ def get_header():
     return header
 
 
-def save_data(ffname, data):
-    f = open(ffname, "w")
-    f.write("\n".join(map(str, data)))
-    f.close()
-
-
-print(get_id())
-header = get_header()
+# header = get_header()
 data = get_data(1)
-save_data("Osci.dat", data)
 ### end of code
