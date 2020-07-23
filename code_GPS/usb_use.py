@@ -1,34 +1,55 @@
-import sys
 import usb.core
 import usb.util
 
-# decimal vendor and product values
-# dev = usb.core.find(idVendor=1118, idProduct=1917)
-# or, uncomment the next line to search instead by the hexidecimal equivalent
-# 093a:2510
 dev = usb.core.find(idVendor=0x0403, idProduct=0x6001)
-# first endpoint
-interface = 0
-endpoint = dev[0][(0, 0)][0]
-# if the OS kernel already claimed the device, which is most likely true
-# thanks to http://stackoverflow.com/questions/8218683/pyusb-cannot-set-configuration
-if dev.is_kernel_driver_active(interface) is True:
-    # tell the kernel to detach
-    dev.detach_kernel_driver(interface)
-    # claim the device
-    usb.util.claim_interface(dev, interface)
-collected = 0
-attempts = 50
-while collected < attempts:
-    try:
-        data = dev.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize)
-        collected += 1
-        print(data)
-    except usb.core.USBError as e:
-        data = None
-        if e.args == ("Operation timed out",):
-            continue
-# release the device
-usb.util.release_interface(dev, interface)
-# reattach the device to the OS kernel
-dev.attach_kernel_driver(interface)
+
+if dev is None:
+    raise ValueError("Device not found")
+else:
+    print(dev)
+    dev.set_configuration()
+
+
+def send(cmd):
+    # address taken from results of print(dev):   ENDPOINT 0x3: Bulk OUT
+    dev.write(3, cmd)
+    # address taken from results of print(dev):   ENDPOINT 0x81: Bulk IN
+    result = dev.read(0x81, 100000, 1000)
+    return result
+
+
+def get_id():
+    return send("*IDN?").tobytes().decode("utf-8")
+
+
+def get_data(ch):
+    # first 4 bytes indicate the number of data bytes following
+    rawdata = send(":DATA:WAVE:SCREen:CH{}?".format(ch))
+    data = []
+    for idx in range(4, len(rawdata), 2):
+        # take 2 bytes and convert them to signed integer using "little-endian"
+        point = int().from_bytes(
+            [rawdata[idx], rawdata[idx + 1]], "little", signed=True
+        )
+        data.append(point / 4096)  # data as 12 bit
+    return data
+
+
+def get_header():
+    # first 4 bytes indicate the number of data bytes following
+    header = send(":DATA:WAVE:SCREen:HEAD?")
+    header = header[4:].tobytes().decode("utf-8")
+    return header
+
+
+def save_data(ffname, data):
+    f = open(ffname, "w")
+    f.write("\n".join(map(str, data)))
+    f.close()
+
+
+print(get_id())
+header = get_header()
+data = get_data(1)
+save_data("Osci.dat", data)
+### end of code
