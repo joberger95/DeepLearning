@@ -3,12 +3,12 @@ import adafruit_gps
 import serial
 import board
 
-# uart = serial.Serial("/dev/bus/usb/001/002", baudrate=9600, timeout=10)
-# gps = adafruit_gps.GPS(uart, debug=False)
+uart = serial.Serial("/dev/bus/usb/001/002", baudrate=9600, timeout=10)
+gps = adafruit_gps.GPS(uart, debug=False)
 
 # With I2C test
-i2c = board.I2C()
-gps = adafruit_gps.GPS_GtopI2C(i2c, debug=false)
+# i2c = board.I2C()
+# gps = adafruit_gps.GPS_GtopI2C(i2c, debug=false)
 
 # Turn on GGA and RMC and up to 1Hz
 gps.send_command(b"PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0")
