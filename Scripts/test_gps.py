@@ -2,7 +2,7 @@ import time
 import adafruit_gps
 import serial
 
-uart = serial.Serial("/dev/ttyAntenne", baudrate=9600, timeout=10,)
+uart = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=10,)
 gps = adafruit_gps.GPS(uart, debug=False)
 
 # With I2C test
@@ -49,4 +49,3 @@ if gps.horizontal_dilution is not None:
     print("Horizontal dilution: {}".format(gps.horizontal_dilution))
 if gps.height_geoid is not None:
     print("Height geo ID: {} meters".format(gps.height_geoid))
-
